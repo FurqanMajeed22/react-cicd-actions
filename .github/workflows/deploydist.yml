@@ -36,27 +36,46 @@ jobs:
               run: npm ci
             - name: Run test
               run: npm run test
-    deploy:
+    build:
         needs: test
         runs-on: ubuntu-latest
         steps:
             - name: Get code
-              uses: actions/checkout@v4
-            - name: install node
-              uses: actions/setup-node@v4
+              uses: actions/checkout@v6
+            - name: Intsall Node 20
+              uses: actions/setup-node@v6
               with:
-                node-version : 20
+                node-version: 20
+            - name: print node version
+              run: node -v
             - name: Cache dependencies
               uses: actions/cache@v4
               with:
                 path: ~/.npm
                 key: ${{ runner.os }} -node-${{ hashFiles('**/package-lock.json')}}
-            - name: Install Dependencies
+
+            - name: Install dependencies
               run: npm ci
-            - name: Build Project
+            - name: Build project
               run: npm run build
-            - name: Deploying
-              run: echo "Deploy Successfull"
+            - name: Upload Dist Artifact
+              uses: actions/upload-artifact@v4
+              with:
+                name: dist-files
+                path: dist
+              
+    deploy:
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
+            - name: Download Dist Artifact
+              uses: actions/download-artifact@v4
+              with:
+                name: dist-files
+                path: dist
+            - name: Deploy
+              run: echo "Deployed"
+              
 
 
 
