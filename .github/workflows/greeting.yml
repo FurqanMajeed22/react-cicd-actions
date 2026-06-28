@@ -1,5 +1,5 @@
 name: FurqanGreeting
-on: push
+on: workflow_dispatch
 jobs:
     greet:
         runs-on: ubunutu-latest
