@@ -1,0 +1,13 @@
+name: furqanflow
+on: ["push","workflow_dispatch"]
+env:
+    cloud: aws
+jobs:
+    greet:
+        runs-on: ubuntu-latest
+        env:
+            name: furqan
+        steps:
+          - name: greeting
+            run: echo "i am ${name} i am using ${cloud}"
+    
